@@ -2,60 +2,157 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Video Management</title>
   <style>
-    body {
-      font-family: sans-serif;
-      background: #111;
-      color: white;
-      padding: 2rem;
+    body, html {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
-    input, button {
-      padding: 0.5rem;
-      margin: 0.5rem 0;
+    .container {
+      width: 500px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      font-size: 1.1rem;
+      color: #333;
+    }
+    .form-group input {
       width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+    .form-group button {
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
       font-size: 1rem;
     }
-    .info {
-      margin-top: 1rem;
-      color: lime;
+    .form-group button:hover {
+      background-color: #218838;
+    }
+    .video-list {
+      margin-top: 20px;
+    }
+    .video-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      margin: 10px 0;
+      background: #f9f9f9;
+      border-radius: 5px;
+    }
+    .video-item button {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-<h2>🔒 Admin Panel</h2>
-<p>Paste full video link (like <code>https://media.cm/u/HIY5</code>)</p>
-<input type="text" id="videoUrl" placeholder="Paste full video URL here..." />
-<button onclick="updateVideo()">Update Video</button>
+<div class="container">
+  <h1>Admin Panel</h1>
 
-<div class="info" id="status"></div>
+  <div class="form-group">
+    <label for="videoTitle">Video Title</label>
+    <input type="text" id="videoTitle" placeholder="Enter video title">
+  </div>
+  <div class="form-group">
+    <label for="videoURL">Video URL (e.g., apv4cy2hgvu5)</label>
+    <input type="text" id="videoURL" placeholder="Enter video URL ID">
+  </div>
+  <div class="form-group">
+    <label for="videoThumbnail">Thumbnail URL</label>
+    <input type="text" id="videoThumbnail" placeholder="Enter thumbnail URL">
+  </div>
+  <div class="form-group">
+    <button onclick="addVideo()">Add Video</button>
+  </div>
+
+  <div class="video-list">
+    <h2>Current Video List</h2>
+    <div id="videoListContainer"></div>
+  </div>
+</div>
 
 <script>
-  const PASSWORD = "mysecret123"; // change this to a strong password
+  // In-memory store (would be saved to a database or localStorage in a real app)
+  let videoList = JSON.parse(localStorage.getItem('videoList')) || [];
 
-  const userPass = prompt("Enter admin password:");
-  if (userPass !== PASSWORD) {
-    document.body.innerHTML = "<h2>🚫 Access Denied</h2>";
-    throw new Error("Access Denied");
+  // Display existing video list
+  function displayVideos() {
+    const videoListContainer = document.getElementById('videoListContainer');
+    videoListContainer.innerHTML = '';
+
+    videoList.forEach((video, index) => {
+      const videoItem = document.createElement('div');
+      videoItem.classList.add('video-item');
+      videoItem.innerHTML = `
+        <div>
+          <strong>${video.title}</strong><br>
+          <span>Video ID: ${video.id}</span>
+        </div>
+        <button onclick="deleteVideo(${index})">Delete</button>
+      `;
+      videoListContainer.appendChild(videoItem);
+    });
   }
 
-  function extractVideoId(url) {
-    const match = url.match(/\/([a-zA-Z0-9]+)$/);
-    return match ? match[1] : null;
-  }
+  // Add new video to the list
+  function addVideo() {
+    const title = document.getElementById('videoTitle').value;
+    const id = document.getElementById('videoURL').value;
+    const thumbnail = document.getElementById('videoThumbnail').value;
 
-  function updateVideo() {
-    const url = document.getElementById("videoUrl").value;
-    const videoId = extractVideoId(url);
-
-    if (videoId) {
-      localStorage.setItem("currentVideo", videoId);
-      document.getElementById("status").textContent = `✅ Video updated: ${videoId}`;
+    if (title && id && thumbnail) {
+      videoList.push({ title, id, thumbnail });
+      localStorage.setItem('videoList', JSON.stringify(videoList));
+      displayVideos();
+      resetForm();
     } else {
-      document.getElementById("status").textContent = "❌ Invalid video URL";
+      alert('Please fill all fields');
     }
   }
+
+  // Delete video from the list
+  function deleteVideo(index) {
+    videoList.splice(index, 1);
+    localStorage.setItem('videoList', JSON.stringify(videoList));
+    displayVideos();
+  }
+
+  // Reset form after adding video
+  function resetForm() {
+    document.getElementById('videoTitle').value = '';
+    document.getElementById('videoURL').value = '';
+    document.getElementById('videoThumbnail').value = '';
+  }
+
+  displayVideos();
 </script>
 
 </body>
