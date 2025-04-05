@@ -2,88 +2,87 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Video Viewer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TubeSite - Video Library</title>
   <style>
     body, html {
       margin: 0;
       padding: 0;
-      height: 100%;
-      background: #000;
-      color: #fff;
-      font-family: sans-serif;
+      background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
     }
-    .video-wrapper {
-      position: relative;
-      width: 100%;
-      max-width: 800px;
-      margin: auto;
-      padding-top: 56.25%;
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
     }
-    iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
+    header {
+      text-align: center;
+      padding: 20px 0;
+      background: #111;
+      color: white;
+      font-size: 2rem;
+      font-weight: bold;
     }
-    .overlay {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 2em;
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .video-item {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       cursor: pointer;
-      z-index: 10;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .video-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    .video-thumbnail img {
+      width: 100%;
+      height: auto;
+    }
+    .video-title {
+      padding: 15px;
+      font-size: 1.1rem;
+      color: #333;
+      text-align: center;
     }
   </style>
 </head>
 <body>
 
-<div class="video-wrapper">
-  <iframe id="videoFrame" src="" frameborder="0" allowfullscreen></iframe>
-  <div id="overlay" class="overlay">3 Clicks to Unlock</div>
+<header>
+  TubeSite - Video Library
+</header>
+
+<div class="container">
+  <div class="video-grid" id="videoGrid"></div>
 </div>
 
 <script>
-  const MAX_CLICKS = 3;
-  const CLICK_KEY = "adClicks";
-  const VIDEO_KEY = "currentVideo";
-  const adURL = "https://urgentlyrightypast.com/zzyqigmnc?key=e7e605a2023a3b6334f2752ca3a4c66c";
+  // Get video list from localStorage
+  const videoList = JSON.parse(localStorage.getItem('videoList')) || [];
 
-  const currentClicks = parseInt(localStorage.getItem(CLICK_KEY)) || 0;
-  let clicks = currentClicks;
-  const overlay = document.getElementById("overlay");
-  const iframe = document.getElementById("videoFrame");
+  // Display videos dynamically
+  const videoGrid = document.getElementById('videoGrid');
 
-  function loadVideo() {
-    const videoId = localStorage.getItem(VIDEO_KEY) || "apv4cy2hgvu5";
-    iframe.src = `https://media.cm/e/${videoId}`;
-  }
-
-  function updateOverlay() {
-    const remaining = MAX_CLICKS - clicks;
-    overlay.textContent = remaining > 0 ? `${remaining} Click${remaining > 1 ? 's' : ''} to Unlock` : '';
-  }
-
-  overlay.addEventListener("click", () => {
-    if (clicks < MAX_CLICKS) {
-      window.open(adURL, "_blank");
-      clicks++;
-      localStorage.setItem(CLICK_KEY, clicks);
-      updateOverlay();
-    }
-    if (clicks >= MAX_CLICKS) {
-      overlay.style.display = "none";
-      iframe.style.pointerEvents = "auto";
-    }
+  videoList.forEach(video => {
+    const videoItem = document.createElement('div');
+    videoItem.classList.add('video-item');
+    videoItem.innerHTML = `
+      <div class="video-thumbnail">
+        <img src="${video.thumbnail}" alt="${video.title}">
+      </div>
+      <div class="video-title">${video.title}</div>
+    `;
+    videoItem.onclick = () => window.location.href = `video.html?video_id=${video.id}`;
+    videoGrid.appendChild(videoItem);
   });
-
-  loadVideo();
-  updateOverlay();
 </script>
 
 </body>
