@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #111;
+      color: white;
+      padding: 2rem;
+    }
+    input, button {
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      width: 100%;
+      font-size: 1rem;
+    }
+    .info {
+      margin-top: 1rem;
+      color: lime;
+    }
+  </style>
+</head>
+<body>
+
+<h2>🔒 Admin Panel</h2>
+<p>Paste full video link (like <code>https://media.cm/u/HIY5</code>)</p>
+<input type="text" id="videoUrl" placeholder="Paste full video URL here..." />
+<button onclick="updateVideo()">Update Video</button>
+
+<div class="info" id="status"></div>
+
+<script>
+  const PASSWORD = "mysecret123"; // change this to a strong password
+
+  const userPass = prompt("Enter admin password:");
+  if (userPass !== PASSWORD) {
+    document.body.innerHTML = "<h2>🚫 Access Denied</h2>";
+    throw new Error("Access Denied");
+  }
+
+  function extractVideoId(url) {
+    const match = url.match(/\/([a-zA-Z0-9]+)$/);
+    return match ? match[1] : null;
+  }
+
+  function updateVideo() {
+    const url = document.getElementById("videoUrl").value;
+    const videoId = extractVideoId(url);
+
+    if (videoId) {
+      localStorage.setItem("currentVideo", videoId);
+      document.getElementById("status").textContent = `✅ Video updated: ${videoId}`;
+    } else {
+      document.getElementById("status").textContent = "❌ Invalid video URL";
+    }
+  }
+</script>
+
+</body>
+</html>
