@@ -80,4 +80,10 @@
       </div>
       <div class="video-title">${video.title}</div>
     `;
-    videoItem.onclick = () => window.location.href =
+    videoItem.onclick = () => window.location.href = `play.html?id=${video.id}&ad=${encodeURIComponent(video.adLink)}`;
+    videoGrid.appendChild(videoItem);
+  });
+</script>
+
+</body>
+</html>
