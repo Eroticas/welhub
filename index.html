@@ -76,14 +76,8 @@
     videoItem.classList.add('video-item');
     videoItem.innerHTML = `
       <div class="video-thumbnail">
-        <img src="${video.thumbnail}" alt="${video.title}">
+        <img src="https://img.youtube.com/vi/${video.id}/hqdefault.jpg" alt="${video.title}">
       </div>
       <div class="video-title">${video.title}</div>
     `;
-    videoItem.onclick = () => window.location.href = `video.html?video_id=${video.id}`;
-    videoGrid.appendChild(videoItem);
-  });
-</script>
-
-</body>
-</html>
+    videoItem.onclick = () => window.location.href =
