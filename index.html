@@ -69,13 +69,13 @@
     videoItem.classList.add('video-item');
     videoItem.innerHTML = `
       <div class="video-thumbnail">
-        <!-- Use a generic thumbnail for now -->
+        <!-- Placeholder Thumbnail -->
         <img src="https://via.placeholder.com/500x300.png?text=Video+Thumbnail" alt="${video.title}">
       </div>
       <div class="video-title">${video.title}</div>
     `;
     videoItem.onclick = () => {
-      // On click, open video with ad link and iframe embedding
+      // Redirect to video viewer page
       window.location.href = `play.html?embedCode=${encodeURIComponent(video.embedCode)}&adLink=${encodeURIComponent(video.adLink)}`;
     };
     videoGrid.appendChild(videoItem);
