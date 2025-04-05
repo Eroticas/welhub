@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Video Viewer</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #000;
+      color: #fff;
+      font-family: sans-serif;
+    }
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      margin: auto;
+      padding-top: 56.25%;
+    }
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2em;
+      cursor: pointer;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+<div class="video-wrapper">
+  <iframe id="videoFrame" src="" frameborder="0" allowfullscreen></iframe>
+  <div id="overlay" class="overlay">3 Clicks to Unlock</div>
+</div>
+
+<script>
+  const MAX_CLICKS = 3;
+  const CLICK_KEY = "adClicks";
+  const VIDEO_KEY = "currentVideo";
+  const adURL = "https://urgentlyrightypast.com/zzyqigmnc?key=e7e605a2023a3b6334f2752ca3a4c66c";
+
+  const currentClicks = parseInt(localStorage.getItem(CLICK_KEY)) || 0;
+  let clicks = currentClicks;
+  const overlay = document.getElementById("overlay");
+  const iframe = document.getElementById("videoFrame");
+
+  function loadVideo() {
+    const videoId = localStorage.getItem(VIDEO_KEY) || "apv4cy2hgvu5";
+    iframe.src = `https://media.cm/e/${videoId}`;
+  }
+
+  function updateOverlay() {
+    const remaining = MAX_CLICKS - clicks;
+    overlay.textContent = remaining > 0 ? `${remaining} Click${remaining > 1 ? 's' : ''} to Unlock` : '';
+  }
+
+  overlay.addEventListener("click", () => {
+    if (clicks < MAX_CLICKS) {
+      window.open(adURL, "_blank");
+      clicks++;
+      localStorage.setItem(CLICK_KEY, clicks);
+      updateOverlay();
+    }
+    if (clicks >= MAX_CLICKS) {
+      overlay.style.display = "none";
+      iframe.style.pointerEvents = "auto";
+    }
+  });
+
+  loadVideo();
+  updateOverlay();
+</script>
+
+</body>
+</html>
