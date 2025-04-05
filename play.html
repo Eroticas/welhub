@@ -1,90 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Video Viewer</title>
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background: #000;
-      color: #fff;
-      font-family: sans-serif;
-    }
-    .video-wrapper {
-      position: relative;
-      width: 100%;
-      max-width: 800px;
-      margin: auto;
-      padding-top: 56.25%;
-    }
-    iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
-    .overlay {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 2em;
-      cursor: pointer;
-      z-index: 10;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <header>
+        <div class="container">
+            <h1>Video Player</h1>
+        </div>
+    </header>
 
-<div class="video-wrapper">
-  <iframe id="videoFrame" src="" frameborder="0" allowfullscreen></iframe>
-  <div id="overlay" class="overlay">3 Clicks to Unlock</div>
-</div>
+    <main class="container">
+        <div class="video-details">
+            <h2 id="videoTitle">Loading video...</h2>
+            <div class="video-container" id="videoContainer">
+                <div id="videoPlayer">
+                    <!-- Video iframe will be loaded here -->
+                </div>
+                <div id="unlockOverlay" class="unlock-overlay">
+                    <div class="unlock-content">
+                        <p id="clickCounter">Click 3 more times to unlock</p>
+                    </div>
+                </div>
+            </div>
+            <div class="video-info">
+                <p id="videoDescription">Loading description...</p>
+            </div>
+            <div id="unlockLink" class="unlock-link hidden">
+                <a href="https://example.com/" target="_blank" rel="noopener noreferrer">Visit Content</a>
+            </div>
+        </div>
+    </main>
 
-<script>
-  const MAX_CLICKS = 3;
-  const CLICK_KEY = "adClicks";
-  const VIDEO_KEY = "currentVideo";
-  const adURL = "https://urgentlyrightypast.com/zzyqigmnc?key=e7e605a2023a3b6334f2752ca3a4c66c";
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Video Collection. All rights reserved.</p>
+        </div>
+    </footer>
 
-  const currentClicks = parseInt(localStorage.getItem(CLICK_KEY)) || 0;
-  let clicks = currentClicks;
-  const overlay = document.getElementById("overlay");
-  const iframe = document.getElementById("videoFrame");
-
-  function loadVideo() {
-    const videoEmbedCode = new URLSearchParams(window.location.search).get("embedCode");
-    iframe.src = decodeURIComponent(videoEmbedCode);
-  }
-
-  function updateOverlay() {
-    const remaining = MAX_CLICKS - clicks;
-    overlay.textContent = remaining > 0 ? `${remaining} Click${remaining > 1 ? 's' : ''} to Unlock` : '';
-  }
-
-  overlay.addEventListener("click", () => {
-    if (clicks < MAX_CLICKS) {
-      window.open(adURL, "_blank");
-      clicks++;
-      localStorage.setItem(CLICK_KEY, clicks);
-      updateOverlay();
-    }
-    if (clicks >= MAX_CLICKS) {
-      overlay.style.display = "none";
-      iframe.style.pointerEvents = "auto";
-    }
-  });
-
-  loadVideo();
-  updateOverlay();
-</script>
-
+    <script src="video.js"></script>
 </body>
 </html>
