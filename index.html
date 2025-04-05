@@ -3,18 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TubeSite - Video Library</title>
+  <title>Video Library</title>
   <style>
     body, html {
       margin: 0;
       padding: 0;
       background-color: #f4f4f4;
       font-family: Arial, sans-serif;
-    }
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
     }
     header {
       text-align: center;
@@ -57,7 +52,7 @@
 <body>
 
 <header>
-  TubeSite - Video Library
+  Video Library
 </header>
 
 <div class="container">
@@ -65,22 +60,24 @@
 </div>
 
 <script>
-  // Get video list from localStorage
   const videoList = JSON.parse(localStorage.getItem('videoList')) || [];
 
-  // Display videos dynamically
   const videoGrid = document.getElementById('videoGrid');
 
-  videoList.forEach(video => {
+  videoList.forEach((video, index) => {
     const videoItem = document.createElement('div');
     videoItem.classList.add('video-item');
     videoItem.innerHTML = `
       <div class="video-thumbnail">
-        <img src="https://img.youtube.com/vi/${video.id}/hqdefault.jpg" alt="${video.title}">
+        <!-- Use a generic thumbnail for now -->
+        <img src="https://via.placeholder.com/500x300.png?text=Video+Thumbnail" alt="${video.title}">
       </div>
       <div class="video-title">${video.title}</div>
     `;
-    videoItem.onclick = () => window.location.href = `play.html?id=${video.id}&ad=${encodeURIComponent(video.adLink)}`;
+    videoItem.onclick = () => {
+      // On click, open video with ad link and iframe embedding
+      window.location.href = `play.html?embedCode=${encodeURIComponent(video.embedCode)}&adLink=${encodeURIComponent(video.adLink)}`;
+    };
     videoGrid.appendChild(videoItem);
   });
 </script>
