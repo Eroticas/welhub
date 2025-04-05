@@ -1,157 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Panel - Video Management</title>
-  <style>
-    body, html {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .container {
-      width: 500px;
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-    h1 {
-      text-align: center;
-      color: #333;
-    }
-    .form-group {
-      margin-bottom: 15px;
-    }
-    .form-group label {
-      font-size: 1.1rem;
-      color: #333;
-    }
-    .form-group textarea {
-      width: 100%;
-      padding: 10px;
-      font-size: 1rem;
-      border-radius: 5px;
-      border: 1px solid #ddd;
-      height: 100px;
-    }
-    .form-group button {
-      padding: 10px 20px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    .form-group button:hover {
-      background-color: #218838;
-    }
-    .video-list {
-      margin-top: 20px;
-    }
-    .video-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px;
-      margin: 10px 0;
-      background: #f9f9f9;
-      border-radius: 5px;
-    }
-    .video-item button {
-      background-color: #dc3545;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-<div class="container">
-  <h1>Admin Panel</h1>
-
-  <div class="form-group">
-    <label for="videoTitle">Video Title</label>
-    <input type="text" id="videoTitle" placeholder="Enter video title">
-  </div>
-
-  <div class="form-group">
-    <label for="embedCode">Embed Code</label>
-    <textarea id="embedCode" placeholder="Paste full embed code here"></textarea>
-  </div>
-
-  <div class="form-group">
-    <button onclick="addVideo()">Add Video</button>
-  </div>
-
-  <div class="video-list">
-    <h2>Current Video List</h2>
-    <div id="videoListContainer"></div>
-  </div>
-</div>
-
-<script>
-  const adsterraLink = 'https://urgentlyrightypast.com/zzyqigmnc?key=e7e605a2023a3b6334f2752ca3a4c66c'; // Constant Adsterra Link
-
-  let videoList = JSON.parse(localStorage.getItem('videoList')) || [];
-
-  // Display existing video list
-  function displayVideos() {
-    const videoListContainer = document.getElementById('videoListContainer');
-    videoListContainer.innerHTML = '';
-
-    videoList.forEach((video, index) => {
-      const videoItem = document.createElement('div');
-      videoItem.classList.add('video-item');
-      videoItem.innerHTML = `
-        <div>
-          <strong>${video.title}</strong><br>
-          <span>Embed Code: <pre>${video.embedCode}</pre></span><br>
-          <span>Ad Link: ${adsterraLink}</span>
+    <header>
+        <div class="container">
+            <h1>Admin Panel</h1>
         </div>
-        <button onclick="deleteVideo(${index})">Delete</button>
-      `;
-      videoListContainer.appendChild(videoItem);
-    });
-  }
+    </header>
 
-  // Add new video to the list
-  function addVideo() {
-    const title = document.getElementById('videoTitle').value;
-    const embedCode = document.getElementById('embedCode').value;
+    <main class="container">
+        <div class="admin-form">
+            <h3>Add New Video</h3>
+            <form id="addVideoForm">
+                <div class="form-group">
+                    <label for="videoTitle">Video Title:</label>
+                    <input type="text" id="videoTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="videoDescription">Video Description:</label>
+                    <textarea id="videoDescription" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="videoIframe">Video Iframe Code:</label>
+                    <textarea id="videoIframe" rows="5" required placeholder='<iframe src="https://media.cm/e/apv4cy2hgvu5" frameborder="0" allowfullscreen></iframe>'></textarea>
+                </div>
+                <button type="submit" class="btn">Add Video</button>
+            </form>
+        </div>
 
-    if (title && embedCode) {
-      videoList.push({ title, embedCode, adLink: adsterraLink });
-      localStorage.setItem('videoList', JSON.stringify(videoList));
-      displayVideos();
-      resetForm();
-    } else {
-      alert('Please fill all fields');
-    }
-  }
+        <div class="admin-videos">
+            <h3>Manage Videos</h3>
+            <div class="video-list" id="adminVideoList">
+                <!-- Videos will be loaded here dynamically -->
+            </div>
+        </div>
+    </main>
 
-  // Delete video from the list
-  function deleteVideo(index) {
-    videoList.splice(index, 1);
-    localStorage.setItem('videoList', JSON.stringify(videoList));
-    displayVideos();
-  }
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Video Collection. All rights reserved.</p>
+        </div>
+    </footer>
 
-  // Reset form after adding video
-  function resetForm() {
-    document.getElementById('videoTitle').value = '';
-    document.getElementById('embedCode').value = '';
-  }
-
-  displayVideos();
-</script>
-
+    <script src="admin.js"></script>
 </body>
 </html>
