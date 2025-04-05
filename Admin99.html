@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Panel - Video Management</title>
   <style>
     body, html {
@@ -99,10 +98,9 @@
 </div>
 
 <script>
-  // In-memory store (would be saved to a database or localStorage in a real app)
-  let videoList = JSON.parse(localStorage.getItem('videoList')) || [];
-
   const adsterraLink = 'https://urgentlyrightypast.com/zzyqigmnc?key=e7e605a2023a3b6334f2752ca3a4c66c'; // Constant Adsterra Link
+
+  let videoList = JSON.parse(localStorage.getItem('videoList')) || [];
 
   // Display existing video list
   function displayVideos() {
